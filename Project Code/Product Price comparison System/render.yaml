@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ppc-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN  
+        sync: false  # Set manually after frontend URL known
+      - key: JWT_SECRET
+        generateValue: true
+    autoDeploy: true

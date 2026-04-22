@@ -1,0 +1,38 @@
+trigger:
+  - main  # Trigger pipeline when changes are pushed to the main branch
+
+pool:
+  vmImage: ubuntu-latest  # Use a hosted Ubuntu agent
+
+steps:
+# Step 1: Checkout the code from GitHub
+- checkout: self
+
+# Step 2: Set up Node.js environment
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'  # Use Node.js 18.x LTS version
+  displayName: "Set up Node.js"
+
+# Step 3: Install backend dependencies from the correct path
+- script: |
+    cd backend
+    npm install
+  displayName: "Install backend dependencies"
+
+# Step 4: Install frontend dependencies from the correct path
+- script: |
+    cd frontend
+    npm install
+  displayName: "Install frontend dependencies"
+
+# Step 5: Build the frontend production bundle
+- script: |
+    cd frontend
+    npm run build
+  displayName: "Build frontend"
+
+# Step 6: Run a simple script to verify the environment is set up correctly
+- script: |
+    node -e "console.log('🛒 Hello from Product Price Comparison System!'); console.log('Node version:', process.version); console.log('Pipeline working successfully ✅');"
+  displayName: "Run a Node.js verification script"
